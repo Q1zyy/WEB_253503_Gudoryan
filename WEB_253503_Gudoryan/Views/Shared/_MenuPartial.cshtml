@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "_MenuPartial";
+	var controller = ViewContext.RouteData.Values["controller"]?
+		.ToString()?
+		.ToLower()
+		?? String.Empty;
+}
+<a class="navbar-brand" href="#">25350036</a>
+<div class="navbar-nav">
+	<a class="nav-item nav-link @(controller=="home" ? "active" : "")" asp-controller="Home" asp-action="Index">Лб 1</a>
+	<a class="nav-item nav-link @(controller=="game" ? "active" : "")" asp-controller="Game" asp-action="Index">Каталог</a>
+	<a class="nav-item nav-link @(controller=="admin" ? "active" : "")" asp-area="Admin" asp-page="/Index">Администрирование</a>
+</div>
+
+
