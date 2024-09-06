@@ -1,4 +1,4 @@
-﻿namespace WEB_253503_Gudoryan.Views.Shared.Components.Cart
+﻿namespace WEB_253503_Gudoryan.UI.Views.Shared.Components.Cart
 {
     using Microsoft.AspNetCore.Html;
     using Microsoft.AspNetCore.Mvc;

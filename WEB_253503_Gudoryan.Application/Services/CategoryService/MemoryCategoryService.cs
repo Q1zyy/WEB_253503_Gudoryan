@@ -1,7 +1,7 @@
 ﻿using WEB_253503_Gudoryan.Domain.Entities;
 using WEB_253503_Gudoryan.Domain.Models;
 
-namespace WEB_253503_Gudoryan.UI.Services.CategoryService
+namespace WEB_253503_Gudoryan.Application.Services.CategoryService
 {
 	public class MemoryCategoryService : ICategoryService
 	{

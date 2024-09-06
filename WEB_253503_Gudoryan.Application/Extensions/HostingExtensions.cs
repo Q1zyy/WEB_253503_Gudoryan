@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using WEB_253503_Gudoryan.UI.Services.CategoryService;
-using WEB_253503_Gudoryan.UI.Services.GameService;
+using WEB_253503_Gudoryan.Application.Services.CategoryService;
+using WEB_253503_Gudoryan.Application.Services.GameService;
 
-namespace WEB_253503_Gudoryan.UI.Extensions
+namespace WEB_253503_Gudoryan.Application.Extensions
 {
 	public static class HostingExtensions
 	{

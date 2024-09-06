@@ -1,4 +1,4 @@
-namespace WEB_253503_Gudoryan.Models
+namespace WEB_253503_Gudoryan.UI.Models
 {
 	public class ErrorViewModel
 	{

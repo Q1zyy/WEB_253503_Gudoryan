@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using WEB_253503_Gudoryan.Models;
+using WEB_253503_Gudoryan.UI.Models;
 
-namespace WEB_253503_Gudoryan.Controllers
+namespace WEB_253503_Gudoryan.UI.Controllers
 {
 	public class HomeController : Controller
 	{

@@ -1,4 +1,4 @@
-using WEB_253503_Gudoryan.UI.Extensions;
+using WEB_253503_Gudoryan.Application.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

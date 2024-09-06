@@ -2,7 +2,7 @@
 using WEB_253503_Gudoryan.Domain.Entities;
 using WEB_253503_Gudoryan.Domain.Models;
 
-namespace WEB_253503_Gudoryan.UI.Services.GameService
+namespace WEB_253503_Gudoryan.Application.Services.GameService
 {
 	public interface IGameService
 	{

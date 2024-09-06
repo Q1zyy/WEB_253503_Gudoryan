@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WEB_253503_Gudoryan.Domain.Entities;
 using WEB_253503_Gudoryan.Domain.Models;
-using WEB_253503_Gudoryan.UI.Services.CategoryService;
+using WEB_253503_Gudoryan.Application.Services.CategoryService;
 
-namespace WEB_253503_Gudoryan.UI.Services.GameService
+namespace WEB_253503_Gudoryan.Application.Services.GameService
 {
 	public class MemoryGameService : IGameService
 	{

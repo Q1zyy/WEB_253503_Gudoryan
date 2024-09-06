@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WEB_253503_Gudoryan.UI.Services.CategoryService;
-using WEB_253503_Gudoryan.UI.Services.GameService;
+using WEB_253503_Gudoryan.Application.Services.CategoryService;
+using WEB_253503_Gudoryan.Application.Services.GameService;
 using WEB_253503_Gudoryan.Domain.Entities;
 using WEB_253503_Gudoryan.Domain.Models;
 
-namespace WEB_253503_Gudoryan.Controllers
+namespace WEB_253503_Gudoryan.UI.Controllers
 {
 	public class GameController : Controller
 	{
