@@ -1,0 +1,6 @@
+@WEB_253503_Gudoryan.API_HostAddress = http://localhost:5276
+
+GET {{WEB_253503_Gudoryan.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
