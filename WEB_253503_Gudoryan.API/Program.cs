@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WEB_253503_Gudoryan.API.Data;
+using WEB_253503_Gudoryan.API.Services.CategoryService;
+using WEB_253503_Gudoryan.API.Services.GameService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("Default"))
+            .EnableSensitiveDataLogging() 
+            .LogTo(Console.WriteLine, LogLevel.Information)); 
+
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IGameService, GameService>();
+
 
 var app = builder.Build();
 
@@ -28,5 +37,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await DbInitializer.SeedData(app);
 
 app.Run();

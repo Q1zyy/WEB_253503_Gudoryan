@@ -14,7 +14,7 @@
 
         public string? ImagePath { get; set; }
 
-        public string MimeType { get; set; }
+        public string? MimeType { get; set; }
 
 
     }
