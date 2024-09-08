@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WEB_253503_Gudoryan.API.Data;
+using WEB_253503_Gudoryan.API.Services.CategoryService;
 using WEB_253503_Gudoryan.API.Services.GameService;
 using WEB_253503_Gudoryan.Domain.Entities;
 using WEB_253503_Gudoryan.Domain.Models;
@@ -18,15 +19,17 @@ namespace WEB_253503_Gudoryan.API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IGameService _gameService;
+        private readonly ICategoryService _categoryService;
 
-        public GamesController(AppDbContext context, IGameService gameService)
+        public GamesController(AppDbContext context, IGameService gameService, ICategoryService categoryService)
         {
             _context = context;
             _gameService = gameService;
+            _categoryService = categoryService;
         }
 
         // GET: api/Games
-        [HttpGet]
+        [HttpGet("{category?}")]
         public async Task<ActionResult<ResponseData<ListModel<Game>>>> GetGames(string? category, int pageNo = 1, int pageSize = 3)
         {
             var result = await _gameService.GetGameListAsync(category, pageNo, pageSize);
@@ -38,7 +41,7 @@ namespace WEB_253503_Gudoryan.API.Controllers
         }
 
         // GET: api/Games/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<ResponseData<Game>>> GetGame(int id)
         {
             var result = await _gameService.GetGameByIdAsync(id);
@@ -77,8 +80,18 @@ namespace WEB_253503_Gudoryan.API.Controllers
         // POST: api/Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ResponseData<Game>>> PostGame(Game game)
+        public async Task<ActionResult<ResponseData<Game>>> PostGame([FromBody] GameDto gameDto)
         {
+            var abc = (await _categoryService.GetCategoryByIdAsync(gameDto.CategoryId)).Data;
+            var game = new Game
+            {
+                Name = gameDto.Name,
+                Description = gameDto.Description,
+                Category = (await _categoryService.GetCategoryByIdAsync(gameDto.CategoryId)).Data,
+                Price = gameDto.Price,
+                ImagePath = gameDto.ImagePath,
+                MimeType = gameDto.MimeType
+            };
             var result = await _gameService.CreateGameAsync(game);
             return CreatedAtAction("GetGame", new { id = game.Id }, game);
         }

@@ -10,5 +10,7 @@ namespace WEB_253503_Gudoryan.API.Services.CategoryService
         /// </summary>
         /// <returns></returns>
         public Task<ResponseData<List<Category>>> GetCategoryListAsync();
+
+        public Task<ResponseData<Category>> GetCategoryByIdAsync(int id);
     }
 }

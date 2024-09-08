@@ -20,5 +20,12 @@ namespace WEB_253503_Gudoryan.API.Services.CategoryService
             var categories = await _context.Categories.ToListAsync();
             return ResponseData<List<Category>>.Success(categories);
         }
+
+        public async Task<ResponseData<Category>> GetCategoryByIdAsync(int id)
+        {
+            var category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == id);
+            return ResponseData<Category>.Success(category);
+        }
+
     }
 }

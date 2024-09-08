@@ -18,6 +18,7 @@ namespace WEB_253503_Gudoryan.UI.Controllers
 			_categories = categoryService.GetCategoryListAsync().Result.Data;
 		}
 
+		[HttpGet("games/{category?}")]
 		public async Task<IActionResult> Index(string? category, int pageNo = 1)
 		{
 			ViewData["currentCategory"] = (category == null) ? "Все" : _categories.Find(c => c.NormalizedName.Equals(category)).Name;

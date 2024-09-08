@@ -1,4 +1,8 @@
 using WEB_253503_Gudoryan.Application.Extensions;
+using WEB_253503_Gudoryan.UI.Models;
+using WEB_253503_Gudoryan.Application.Services;
+using WEB_253503_Gudoryan.Application.Services.GameService;
+using WEB_253503_Gudoryan.Application.Services.CategoryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.RegisterCustomServices();
+
 
 var app = builder.Build();
 
@@ -22,6 +27,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
 	name: "default",
