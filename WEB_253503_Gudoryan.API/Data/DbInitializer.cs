@@ -34,8 +34,6 @@ namespace WEB_253503_Gudoryan.API.Data
 
             if (!(await context.Games.AnyAsync()))
             {
-                var a = $"{baseUrl}/Images/dota2.jpg";
-                var b = await context.Categories.FirstAsync(c => c.NormalizedName.Equals("mobas"));
                 await context.Games.AddRangeAsync(
                     new List<Game>
                     {

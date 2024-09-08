@@ -16,32 +16,48 @@ namespace WEB_253503_Gudoryan.API.Services.GameService
             _context = context;
         }
 
-        public Task<ResponseData<Game>> CreateProductAsync(Game product)
+        public async Task<ResponseData<Game>> CreateGameAsync(Game game)
         {
-            throw new NotImplementedException();
+            var category = await _context.Categories.FindAsync(game.Category.Id);
+            if (category != null)
+            {
+                game.Category = category;
+            }
+            await _context.Games.AddAsync(game);
+            await _context.SaveChangesAsync();
+            return ResponseData<Game>.Success(game); 
         }
 
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteGameAsync(int id)
         {
-            throw new NotImplementedException();
+            var game = await _context.Games.FindAsync(id);
+            if (game != null)
+            {
+                _context.Games.Remove(game);
+                await _context.SaveChangesAsync();
+            } 
         }
 
-        public async Task<ResponseData<Game>> GetProductByIdAsync(int id)
+        public async Task<ResponseData<Game>> GetGameByIdAsync(int id)
         {
-            var game = await _context.Games.Include(g => g.Category).FirstAsync(g => g.Id == id);
+            var game = await _context.Games.Include(g => g.Category).FirstOrDefaultAsync(g => g.Id == id);
+            if (game == null)
+            {
+                return ResponseData<Game>.Error("No such game");
+            }
             return ResponseData<Game>.Success(game);
         }
 
-        public async Task<ResponseData<ListModel<Game>>> GetProductListAsync(string? categoryNormalizedName, int pageNo = 1, int pageSize = 3)
+        public async Task<ResponseData<ListModel<Game>>> GetGameListAsync(string? categoryNormalizedName, int pageNo = 1, int pageSize = 3)
         {
             if (pageSize > _maxPageSize)
             {
                 pageSize = _maxPageSize;
             }
 
-            var data = _context.Games
+            var data = await _context.Games.Include(g => g.Category)
                 .Where(d => categoryNormalizedName == null || d.Category.NormalizedName.Equals(categoryNormalizedName))
-                .ToList();
+                .ToListAsync();
 
 
             int allPages = (data.Count + pageSize - 1) / pageSize;
@@ -67,9 +83,10 @@ namespace WEB_253503_Gudoryan.API.Services.GameService
             throw new NotImplementedException();
         }
 
-        public Task UpdateProductAsync(int id, Game product)
+        public async Task UpdateGameAsync(int id, Game game)
         {
-            throw new NotImplementedException();
+            _context.Entry(game).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }

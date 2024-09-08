@@ -29,28 +29,24 @@ namespace WEB_253503_Gudoryan.API.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseData<ListModel<Game>>>> GetGames(string? category, int pageNo = 1, int pageSize = 3)
         {
-            var result = await _gameService.GetProductListAsync(category, pageNo, pageSize);
+            var result = await _gameService.GetGameListAsync(category, pageNo, pageSize);
             if (result.Successful)
             {
                 return Ok(result);
-            } else
-            {
-                return BadRequest(result);
             }
+            return BadRequest(result);
         }
 
         // GET: api/Games/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGame(int id)
+        public async Task<ActionResult<ResponseData<Game>>> GetGame(int id)
         {
-            var game = await _context.Games.Include(g => g.Category).FirstAsync(g => g.Id == id);
-
-            if (game == null)
+            var result = await _gameService.GetGameByIdAsync(id);
+            if (result.Successful)
             {
-                return NotFound();
-            }
-
-            return game;
+                return Ok(result);
+            } 
+            return NotFound();
         }
 
         // PUT: api/Games/5
@@ -63,21 +59,15 @@ namespace WEB_253503_Gudoryan.API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(game).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _gameService.UpdateGameAsync(id, game);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GameExists(id))
+                if (!(await _gameService.GetGameByIdAsync(id)).Successful)
                 {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
                 }
             }
 
@@ -87,11 +77,9 @@ namespace WEB_253503_Gudoryan.API.Controllers
         // POST: api/Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Game>> PostGame(Game game)
+        public async Task<ActionResult<ResponseData<Game>>> PostGame(Game game)
         {
-            _context.Games.Add(game);
-            await _context.SaveChangesAsync();
-
+            var result = await _gameService.CreateGameAsync(game);
             return CreatedAtAction("GetGame", new { id = game.Id }, game);
         }
 
@@ -99,14 +87,13 @@ namespace WEB_253503_Gudoryan.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGame(int id)
         {
-            var game = await _context.Games.FindAsync(id);
+            var game = await _gameService.GetGameByIdAsync(id);
             if (game == null)
             {
                 return NotFound();
             }
 
-            _context.Games.Remove(game);
-            await _context.SaveChangesAsync();
+            await _gameService.DeleteGameAsync(id);
 
             return NoContent();
         }
