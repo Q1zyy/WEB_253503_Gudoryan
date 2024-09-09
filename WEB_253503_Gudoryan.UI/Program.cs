@@ -3,14 +3,15 @@ using WEB_253503_Gudoryan.UI.Models;
 using WEB_253503_Gudoryan.Application.Services;
 using WEB_253503_Gudoryan.Application.Services.GameService;
 using WEB_253503_Gudoryan.Application.Services.CategoryService;
-
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.RegisterCustomServices();
+builder.Services.AddRazorPages();
 
+builder.RegisterCustomServices();
 
 var app = builder.Build();
 
@@ -28,6 +29,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapRazorPages();
 
 app.MapControllerRoute(
 	name: "default",

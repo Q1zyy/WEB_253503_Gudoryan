@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WEB_253503_Gudoryan.Application.Services.CategoryService;
+using WEB_253503_Gudoryan.Application.Services.FileService;
 using WEB_253503_Gudoryan.Application.Services.GameService;
 
 namespace WEB_253503_Gudoryan.Application.Extensions
@@ -15,6 +16,8 @@ namespace WEB_253503_Gudoryan.Application.Extensions
             builder.Services.AddHttpClient<ICategoryService, ApiCategoryService>(opt => opt.BaseAddress = new Uri(apiUri.ApiUri));
 
 			builder.Services.AddHttpClient<IGameService, ApiGameService>(opt => opt.BaseAddress = new Uri(apiUri.ApiUri));
+
+			builder.Services.AddScoped<IFileService, ApiFileService>();
 
 		}
 	}
