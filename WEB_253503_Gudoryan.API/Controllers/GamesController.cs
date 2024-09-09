@@ -76,22 +76,12 @@ namespace WEB_253503_Gudoryan.API.Controllers
 
             return NoContent();
         }
-
+                                      
         // POST: api/Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ResponseData<Game>>> PostGame([FromBody] GameDto gameDto)
+        public async Task<ActionResult<ResponseData<Game>>> PostGame( Game game)
         {
-            var abc = (await _categoryService.GetCategoryByIdAsync(gameDto.CategoryId)).Data;
-            var game = new Game
-            {
-                Name = gameDto.Name,
-                Description = gameDto.Description,
-                Category = (await _categoryService.GetCategoryByIdAsync(gameDto.CategoryId)).Data,
-                Price = gameDto.Price,
-                ImagePath = gameDto.ImagePath,
-                MimeType = gameDto.MimeType
-            };
             var result = await _gameService.CreateGameAsync(game);
             return CreatedAtAction("GetGame", new { id = game.Id }, game);
         }
@@ -113,7 +103,7 @@ namespace WEB_253503_Gudoryan.API.Controllers
 
         private bool GameExists(int id)
         {
-            return _context.Games.Any(e => e.Id == id);
+            return _context.Games.Any(e => e.Id == id);                                                                                                
         }
     }
 }

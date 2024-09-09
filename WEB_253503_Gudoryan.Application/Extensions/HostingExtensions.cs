@@ -17,7 +17,7 @@ namespace WEB_253503_Gudoryan.Application.Extensions
 
 			builder.Services.AddHttpClient<IGameService, ApiGameService>(opt => opt.BaseAddress = new Uri(apiUri.ApiUri));
 
-			builder.Services.AddScoped<IFileService, ApiFileService>();
+			builder.Services.AddHttpClient<IFileService, ApiFileService>(opt => opt.BaseAddress = new Uri(apiUri.ApiUri));
 
 		}
 	}

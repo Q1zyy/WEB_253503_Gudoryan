@@ -19,13 +19,17 @@ namespace WEB_253503_Gudoryan.UI.Controllers
 		}
 
 		[HttpGet("games/{category?}")]
+		//[Route("games/{category?}")]
 		public async Task<IActionResult> Index(string? category, int pageNo = 1)
 		{
 			ViewData["currentCategory"] = (category == null) ? "Все" : _categories.Find(c => c.NormalizedName.Equals(category)).Name;
+			ViewData["currentCategoryShortName"] = category;
 			ViewBag.Categories = _categories;
 			var productResponse = await _gameService.GetGameListAsync(category, pageNo);
 			if (!productResponse.Successful)
+			{
 				return NotFound(productResponse.ErrorMessage);
+			}
 			var result = new ListModel<Game>
 			{
 				Items = productResponse.Data.Items,

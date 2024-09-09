@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Game.Name" class="control-label"></label>
@@ -28,15 +28,22 @@
                 <input asp-for="Game.Price" class="form-control" />
                 <span asp-validation-for="Game.Price" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Game.ImagePath" class="control-label"></label>
-                <input asp-for="Game.ImagePath" class="form-control" />
-                <span asp-validation-for="Game.ImagePath" class="text-danger"></span>
+
+            <div class="for-group">
+                <label asp-for="Category" class="control-label"></label>
+                <select class="form-select" asp-for="Category" aria-label="Default select example">
+                    <option value="@Model.Categories[0].Id"  selected>@Model.Categories[0].Name</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
             </div>
-            <div class="form-group">
-                <label asp-for="Game.MimeType" class="control-label"></label>
-                <input asp-for="Game.MimeType" class="form-control" />
-                <span asp-validation-for="Game.MimeType" class="text-danger"></span>
+
+
+            <div class="from-group">
+                <label asp-for="ImagePath" class="control-label"></label>
+                <input type="file" class="form-control" asp-for="ImagePath">
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

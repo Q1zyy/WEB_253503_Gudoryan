@@ -33,10 +33,14 @@ namespace WEB_253503_Gudoryan.Application.Services.FileService
             var content = new MultipartFormDataContent();
             var streamContent = new StreamContent(formFile.OpenReadStream());
             content.Add(streamContent, "file", newName);
+            
+            var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "Files");
+
             // Поместить контент в запрос
             request.Content = content;
+
             // Отправить запрос к API
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.PostAsync(uri.ToString(), request.Content);
             if (response.IsSuccessStatusCode)
             {
                 // Вернуть полученный Url сохраненного файла

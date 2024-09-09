@@ -42,6 +42,7 @@
 
 @{
     string? category = request.Query["category"].ToString();
+    category = (string?)ViewData["currentCategoryShortName"];
     int cur = Model.CurrentPage;
     int prev = Model.CurrentPage == 1 ? 1 : Model.CurrentPage - 1;
     int next = Model.CurrentPage == Model.TotalPages ? Model.TotalPages : Model.CurrentPage + 1;
@@ -70,7 +71,7 @@
         {
             <li class="page-item @(cur == two ? "active" : "")"><a class="page-link" asp-controller="Game" asp-route-category="@category" asp-route-pageNo="@two">@two</a></li>
         }
-        @if (three <= Model.TotalPages)
+        @if (three <= Model.TotalPages) 
         {
             <li class="page-item @(cur == three ? "active" : "")"><a class="page-link" asp-controller="Game" asp-route-category="@category" asp-route-pageNo="@three">@three</a></li>
         }
