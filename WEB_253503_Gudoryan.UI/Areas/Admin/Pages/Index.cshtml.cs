@@ -20,11 +20,11 @@ namespace WEB_253503_Gudoryan.UI.Areas.Admin.Pages
             _context = context;
         }
 
-        public IList<Game> Game { get;set; } = default!;
+        public ListModel<Game> Game { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int pageNo = 1)
         {
-            Game = (await _context.GetGameListAsync(null)).Data.Items;
+            Game = (await _context.GetGameListAsync(null, pageNo)).Data;
         }
     }
 }

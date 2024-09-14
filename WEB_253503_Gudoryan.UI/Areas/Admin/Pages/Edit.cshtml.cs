@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WEB_253503_Gudoryan.Application.Services.CategoryService;
 using WEB_253503_Gudoryan.Application.Services.GameService;
 using WEB_253503_Gudoryan.Domain.Entities;
 
@@ -14,14 +15,24 @@ namespace WEB_253503_Gudoryan.UI.Areas.Admin.Pages
     public class EditModel : PageModel
     {
         private readonly IGameService _context;
+        private readonly ICategoryService _categoryService;
+        public List<Category> Categories { get; set; }
 
-        public EditModel(IGameService context)
+        public EditModel(IGameService context, ICategoryService categoryService)
         {
             _context = context;
+            _categoryService = categoryService;
         }
 
         [BindProperty]
         public Game Game { get; set; } = default!;
+
+
+        [BindProperty]
+        public IFormFile? ImagePath { get; set; }
+
+        [BindProperty]
+        public int Category { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,7 +40,7 @@ namespace WEB_253503_Gudoryan.UI.Areas.Admin.Pages
             {
                 return NotFound();
             }
-
+            Categories = (await _categoryService.GetCategoryListAsync()).Data;
             var game =  await _context.GetGameByIdAsync(id.Value);
             if (game == null)
             {
@@ -48,8 +59,10 @@ namespace WEB_253503_Gudoryan.UI.Areas.Admin.Pages
                 return Page();
             }
 
-            //_context.Attach(Game).State = EntityState.Modified;
+            Categories = (await _categoryService.GetCategoryListAsync()).Data;
+            Game.Category = Categories.FirstOrDefault(c => c.Id == Category);
 
+            await _context.UpdateGameAsync(Game.Id, Game, ImagePath);
 
             return RedirectToPage("./Index");
         }

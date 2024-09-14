@@ -56,9 +56,10 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
             return ResponseData<Game>.Error($"Объект не добавлен. Error { response.StatusCode.ToString()}");
         }
 
-        public Task DeleteGameAsync(int id)
+        public async Task DeleteGameAsync(int id)
         {
-            throw new NotImplementedException();
+            var url = $"{_httpClient.BaseAddress}games/{id}";
+            var response = await _httpClient.DeleteAsync(new Uri(url));
         }
 
         public async Task<ResponseData<Game>> GetGameByIdAsync(int id)
@@ -128,9 +129,31 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
 
         }
 
-        public Task UpdateGameAsync(int id, Game game, IFormFile? formFile)
+        public async Task UpdateGameAsync(int id, Game game, IFormFile? formFile)
         {
-            throw new NotImplementedException();
+            var curGame = await GetGameByIdAsync(id);
+            if (!curGame.Successful)
+            {
+                return ;
+            }
+            // Первоначально использовать картинку по умолчанию
+            var baseUrl = _configuration.GetSection("BaseApiUrl").Value;
+            game.ImagePath = $"{baseUrl}Images/noimage.jpg";
+            
+            // Сохранить файл изображения
+            if (formFile != null)
+            {
+                var imageUrl = await _fileService.SaveFileAsync(formFile);
+                // Добавить в объект Url изображения
+                if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    game.ImagePath = imageUrl;
+                }
+            }
+            var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + $"Games/{id}");
+            var response = await _httpClient.PutAsJsonAsync(uri, game);
         }
     }
+
+
 }

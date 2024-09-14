@@ -16,13 +16,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Game[0].Name)
+                @Html.DisplayNameFor(model => model.Game.Items[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Game[0].Description)
+                @Html.DisplayNameFor(model => model.Game.Items[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Game[0].Price)
+                @Html.DisplayNameFor(model => model.Game.Items[0].Price)
             </th>
             <th>
                 Image
@@ -31,7 +31,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Game) {
+@foreach (var item in Model.Game.Items) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -60,3 +60,41 @@
 }
     </tbody>
 </table>
+
+
+@{
+    int cur = Model.Game.CurrentPage;
+    int prev = Model.Game.CurrentPage == 1 ? 1 : Model.Game.CurrentPage - 1;
+    int next = Model.Game.CurrentPage == Model.Game.TotalPages ? Model.Game.TotalPages : Model.Game.CurrentPage + 1;
+    int one = cur - 1, two = cur, three = cur + 1;
+    if (prev == cur)
+    {
+        one = 1;
+        two = 2;
+        three = 3;
+    }
+    if (next == cur)
+    {
+        three = cur;
+        two = cur - 1;
+        one = cur - 2;
+    }
+}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" asp-route-pageNo="@prev">Previous</a></li>
+        @if (one > 0)
+        {
+            <li class="page-item @(cur == one ? "active" : "")"><a class="page-link" asp-route-pageNo="@one">@one</a></li>
+        }
+        @if (two > 0 && two <= Model.Game.TotalPages)
+        {
+            <li class="page-item @(cur == two ? "active" : "")"><a class="page-link" asp-route-pageNo="@two">@two</a></li>
+        }
+        @if (three <= Model.Game.TotalPages)
+        {
+            <li class="page-item @(cur == three ? "active" : "")"><a class="page-link" asp-route-pageNo="@three">@three</a></li>
+        }
+        <li class="page-item"><a class="page-link" asp-route-pageNo="@next">Next</a></li>
+    </ul>
+</nav>
