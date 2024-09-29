@@ -46,7 +46,7 @@ namespace WEB_253503_Gudoryan.UI.Areas.Admin.Pages
             {
                 return Page();
             }
-            Categories = (await _categoryService.GetCategoryListAsync()).Data;
+             Categories = (await _categoryService.GetCategoryListAsync()).Data;
             Game.Category = Categories.FirstOrDefault(c => c.Id == Category);
             
             await _context.CreateGameAsync(Game, ImagePath);

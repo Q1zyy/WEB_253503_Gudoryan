@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,11 @@ namespace WEB_253503_Gudoryan.API.Controllers
         [HttpGet("{category?}")]
         public async Task<ActionResult<ResponseData<ListModel<Game>>>> GetGames(string? category, int pageNo = 1, int pageSize = 3)
         {
+            var claims = User.Claims.Select(c => new
+            {
+                Type = c.Type,
+                Value = c.Value
+            });
             var result = await _gameService.GetGameListAsync(category, pageNo, pageSize);
             if (result.Successful)
             {
@@ -42,6 +49,7 @@ namespace WEB_253503_Gudoryan.API.Controllers
 
         // GET: api/Games/5
         [HttpGet("{id:int}")]
+        [Authorize(Policy = "admin")]
         public async Task<ActionResult<ResponseData<Game>>> GetGame(int id)
         {
             var result = await _gameService.GetGameByIdAsync(id);
@@ -55,6 +63,7 @@ namespace WEB_253503_Gudoryan.API.Controllers
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> PutGame(int id, Game game)
         {
             if (id != game.Id)
@@ -80,6 +89,7 @@ namespace WEB_253503_Gudoryan.API.Controllers
         // POST: api/Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Policy = "admin")]
         public async Task<ActionResult<ResponseData<Game>>> PostGame( Game game)
         {
             var result = await _gameService.CreateGameAsync(game);
@@ -88,6 +98,7 @@ namespace WEB_253503_Gudoryan.API.Controllers
 
         // DELETE: api/Games/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "admin")]
         public async Task<IActionResult> DeleteGame(int id)
         {
             var game = await _gameService.GetGameByIdAsync(id);

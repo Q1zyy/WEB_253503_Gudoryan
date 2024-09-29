@@ -10,6 +10,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WEB_253503_Gudoryan.Application.Services.Authentication;
 using WEB_253503_Gudoryan.Application.Services.FileService;
 using WEB_253503_Gudoryan.Domain.Entities;
 using WEB_253503_Gudoryan.Domain.Models;
@@ -23,12 +24,19 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly IFileService _fileService;
+        private readonly ITokenAccessor _tokenAccessor;
 
-        public ApiGameService(HttpClient httpClient, IConfiguration configuration, IFileService fileService) 
+        public ApiGameService(
+            HttpClient httpClient,
+            IConfiguration configuration,
+            IFileService fileService,
+            ITokenAccessor tokenAccessor
+        ) 
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _fileService = fileService;
+            _tokenAccessor = tokenAccessor;
         }
 
         public async Task<ResponseData<Game>> CreateGameAsync(Game game, IFormFile? formFile)
@@ -39,14 +47,20 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
             if (formFile != null)
             {
                 var imageUrl = await _fileService.SaveFileAsync(formFile);
-                // Добавить в объект Url изображения
+                
                 if (!string.IsNullOrEmpty(imageUrl))
                 {
                     game.ImagePath = imageUrl;
                 }
             }
             var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + "Games");
+
+
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+
             var response = await _httpClient.PostAsJsonAsync(uri, game);
+            
+            
             if (response.IsSuccessStatusCode)
             {
                 var data = await response.Content.ReadFromJsonAsync<ResponseData<Game>>();
@@ -58,6 +72,9 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
 
         public async Task DeleteGameAsync(int id)
         {
+            var curGame = await GetGameByIdAsync(id);
+            await _fileService.DeleteFileAsync(curGame.Data.ImagePath);
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var url = $"{_httpClient.BaseAddress}games/{id}";
             var response = await _httpClient.DeleteAsync(new Uri(url));
         }
@@ -65,6 +82,7 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
         public async Task<ResponseData<Game>> GetGameByIdAsync(int id)
         {
             var url = $"{_httpClient.BaseAddress}games/{id}";
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
             var response = await _httpClient.GetAsync(new Uri(url));
             if (response.IsSuccessStatusCode)
             {
@@ -84,6 +102,7 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
 
         public async Task<ResponseData<ListModel<Game>>> GetGameListAsync(string? categoryNormalizedName, int pageNo = 1)
         {
+
             var url = new StringBuilder($"{_httpClient.BaseAddress}games/");
             int itemsPerPage = _configuration.GetValue<int>("ItemsPerPage");
             
@@ -136,21 +155,27 @@ namespace WEB_253503_Gudoryan.Application.Services.GameService
             {
                 return ;
             }
-            // Первоначально использовать картинку по умолчанию
+
+
+            await _fileService.DeleteFileAsync(curGame.Data.ImagePath);
+
+
             var baseUrl = _configuration.GetSection("BaseApiUrl").Value;
             game.ImagePath = $"{baseUrl}Images/noimage.jpg";
             
-            // Сохранить файл изображения
             if (formFile != null)
             {
                 var imageUrl = await _fileService.SaveFileAsync(formFile);
-                // Добавить в объект Url изображения
+                
                 if (!string.IsNullOrEmpty(imageUrl))
                 {
                     game.ImagePath = imageUrl;
                 }
             }
             var uri = new Uri(_httpClient.BaseAddress.AbsoluteUri + $"Games/{id}");
+
+            await _tokenAccessor.SetAuthorizationHeaderAsync(_httpClient);
+
             var response = await _httpClient.PutAsJsonAsync(uri, game);
         }
     }

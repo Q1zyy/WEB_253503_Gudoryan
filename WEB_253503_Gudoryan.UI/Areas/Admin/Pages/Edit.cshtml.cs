@@ -46,6 +46,10 @@ namespace WEB_253503_Gudoryan.UI.Areas.Admin.Pages
             {
                 return NotFound();
             }
+            if (game.Data == null)
+            {
+                return NotFound();
+            }
             Game = game.Data;
             return Page();
         }

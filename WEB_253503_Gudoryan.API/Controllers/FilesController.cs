@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics;
 using System.IO;
 
 namespace WEB_253503_Gudoryan.API.Controllers
@@ -43,9 +44,23 @@ namespace WEB_253503_Gudoryan.API.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteFile(string fileName)
+        public IActionResult DeleteFile([FromForm] string fileName)
         {
-            return Ok();
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return BadRequest("File name cannot be null or empty.");
+            }
+
+            var filePath = Path.Combine(_imagePath, fileName);
+            var fileInfo = new FileInfo(filePath);
+
+            if (!fileInfo.Exists)
+            {
+                return NotFound("File not found.");
+            }
+
+            fileInfo.Delete();
+            return Ok("File deleted successfully.");
         }
     }
 }

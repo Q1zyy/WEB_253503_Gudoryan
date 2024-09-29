@@ -33,10 +33,11 @@ namespace WEB_253503_Gudoryan.UI.Areas.Admin.Pages
             {
                 return NotFound();
             }
-            else
+            if (game.Data == null)
             {
-                Game = game.Data;
+                return Unauthorized();
             }
+            Game = game.Data;
             return Page();
         }
     }
