@@ -80,21 +80,5 @@
         one = cur - 2;
     }
 }
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link" asp-route-pageNo="@prev">Previous</a></li>
-        @if (one > 0)
-        {
-            <li class="page-item @(cur == one ? "active" : "")"><a class="page-link" asp-route-pageNo="@one">@one</a></li>
-        }
-        @if (two > 0 && two <= Model.Game.TotalPages)
-        {
-            <li class="page-item @(cur == two ? "active" : "")"><a class="page-link" asp-route-pageNo="@two">@two</a></li>
-        }
-        @if (three <= Model.Game.TotalPages)
-        {
-            <li class="page-item @(cur == three ? "active" : "")"><a class="page-link" asp-route-pageNo="@three">@three</a></li>
-        }
-        <li class="page-item"><a class="page-link" asp-route-pageNo="@next">Next</a></li>
-    </ul>
-</nav>
+<pager current-page="@Model.Game.CurrentPage" total-pages="@Model.Game.TotalPages" admin="true">
+</pager>

@@ -1,0 +1,28 @@
+﻿@{
+    var request = ViewContext.HttpContext.Request;
+    var returnUrl = request.Path + request.QueryString.ToUriComponent();
+}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var game in Model.Items)
+    {
+        <div class="col">
+            <div class="card">
+                <img class="card-img-top" style="height: 250px" src="@game.ImagePath" />
+                <div class="card-body">
+                    <h5 class="card-title">@game.Name</h5>
+                    <p class="card-text">@game.Description</p>
+                    <p class="card-text">@game.Price $</p>
+                    <a href="@Url.Action("Add", "Cart", new { id = game.Id, returnUrl = returnUrl })" class="btn btn-primary">Add to cart</a>
+                </div>
+            </div>
+        </div>
+     }
+</div>
+
+@{
+    string? category = request.Query["category"].ToString();
+    category = (string?)ViewData["currentCategoryShortName"];
+}
+
+<pager current-page="@Model.CurrentPage" total-pages="@Model.TotalPages" category="@category">
+</pager>

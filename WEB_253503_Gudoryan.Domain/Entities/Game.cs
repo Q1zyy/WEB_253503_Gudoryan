@@ -1,4 +1,6 @@
-﻿namespace WEB_253503_Gudoryan.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WEB_253503_Gudoryan.Domain.Entities
 {
     public class Game
     {
@@ -10,7 +12,7 @@
 
         public Category? Category { get; set; }
 
-        public decimal Price { get; set; }
+		public decimal Price { get; set; }
 
         public string? ImagePath { get; set; }
 

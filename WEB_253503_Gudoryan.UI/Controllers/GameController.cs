@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WEB_253503_Gudoryan.Application.Extensions;
 using WEB_253503_Gudoryan.Application.Services.CategoryService;
 using WEB_253503_Gudoryan.Application.Services.GameService;
 using WEB_253503_Gudoryan.Domain.Entities;
@@ -19,7 +20,6 @@ namespace WEB_253503_Gudoryan.UI.Controllers
 		}
 
 		[HttpGet("games/{category?}")]
-		//[Route("games/{category?}")]
 		public async Task<IActionResult> Index(string? category, int pageNo = 1)
 		{
 			ViewData["currentCategory"] = (category == null) ? "Все" : _categories.Find(c => c.NormalizedName.Equals(category)).Name;
@@ -29,14 +29,21 @@ namespace WEB_253503_Gudoryan.UI.Controllers
 			if (!productResponse.Successful)
 			{
 				return NotFound(productResponse.ErrorMessage);
-			}
+			}            
+			
 			var result = new ListModel<Game>
 			{
 				Items = productResponse.Data.Items,
 				CurrentPage = pageNo,
 				TotalPages = productResponse.Data.TotalPages
             };
-			return View(result);
+
+            if (Request.IsAjaxRequest())
+			{ 
+                return PartialView("_GameListPartial", result);
+            }
+
+            return View(result);
 		}
 	}
 }
