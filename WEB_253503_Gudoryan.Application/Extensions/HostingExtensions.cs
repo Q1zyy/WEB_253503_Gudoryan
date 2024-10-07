@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WEB_253503_Gudoryan.Application.Services.Authentication;
@@ -6,6 +7,8 @@ using WEB_253503_Gudoryan.Application.Services.Authorization;
 using WEB_253503_Gudoryan.Application.Services.CategoryService;
 using WEB_253503_Gudoryan.Application.Services.FileService;
 using WEB_253503_Gudoryan.Application.Services.GameService;
+using WEB_253503_Gudoryan.Application.Services.Session;
+using WEB_253503_Gudoryan.Domain.Entities;
 using WEB_253503_Gudoryan.Domain.HelperClasses;
 
 namespace WEB_253503_Gudoryan.Application.Extensions
@@ -27,6 +30,10 @@ namespace WEB_253503_Gudoryan.Application.Extensions
             builder.Services.AddHttpClient<ITokenAccessor, KeycloakTokenAccessor>();
 
             builder.Services.AddHttpClient<IAuthService, KeycloakAuthService>();
+
+            builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         }
 	}

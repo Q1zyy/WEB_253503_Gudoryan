@@ -53,6 +53,7 @@ namespace WEB_253503_Gudoryan.UI.Controllers
 		[HttpPost]
 		public async Task Logout()
 		{
+			HttpContext.Session.Clear();
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 			await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme,
 				new AuthenticationProperties

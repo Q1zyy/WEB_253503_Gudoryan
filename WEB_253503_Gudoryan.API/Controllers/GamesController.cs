@@ -49,7 +49,6 @@ namespace WEB_253503_Gudoryan.API.Controllers
 
         // GET: api/Games/5
         [HttpGet("{id:int}")]
-        [Authorize(Policy = "admin")]
         public async Task<ActionResult<ResponseData<Game>>> GetGame(int id)
         {
             var result = await _gameService.GetGameByIdAsync(id);

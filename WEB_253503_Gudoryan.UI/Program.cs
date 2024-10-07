@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using WEB_253503_Gudoryan.Domain.HelperClasses;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +17,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddDistributedMemoryCache();
+
 
 builder.RegisterCustomServices();
 
@@ -43,8 +47,15 @@ builder.Services
         options.MetadataAddress = $"{keycloakData.Host}/realms/{keycloakData.Realm}/.well-known/openid-configuration";
     });
 
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("admin", p => p.RequireRole("POWER-USER"));
+});
 
 
+
+
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -56,9 +67,15 @@ if (!app.Environment.IsDevelopment())
 	app.UseHsts();
 }
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
+
+
+app.UseAuthentication();
+
+app.UseSession(); 
 
 app.UseAuthorization();
 

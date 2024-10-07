@@ -1,0 +1,42 @@
+﻿@model Cart
+
+@{
+    var request = ViewContext.HttpContext.Request;
+    var returnUrl = request.Path + request.QueryString.ToUriComponent();
+}
+
+<h1>Cart</h1>
+
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.CartItems.Values)
+        {
+            <tr>
+                <td>
+                    <img src="@Url.Content(item.Game.ImagePath)" alt="Image" style="width: 150px; height: 100px;" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+                <td>
+                    <a href="@Url.Action("Add", "Cart", new { id = item.Game.Id, returnUrl = returnUrl })" class="btn btn-success">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                    <a href="@Url.Action("Decrease", "Cart", new { id = item.Game.Id, returnUrl = returnUrl })" class="btn btn-info">
+                        <i class="fa-solid fa-minus"></i>
+                    </a>
+                    <a href="@Url.Action("Remove", "Cart", new { id = item.Game.Id, returnUrl = returnUrl })" class="btn btn-danger">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
