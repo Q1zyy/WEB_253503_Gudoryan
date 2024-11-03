@@ -22,10 +22,21 @@ namespace WEB_253503_Gudoryan.UI.Controllers
 		[HttpGet("games/{category?}")]
 		public async Task<IActionResult> Index(string? category, int pageNo = 1)
 		{
-			ViewData["currentCategory"] = (category == null) ? "Все" : _categories.Find(c => c.NormalizedName.Equals(category)).Name;
+			Category? category1 = _categories.Find(c => c.NormalizedName.Equals(category));
+
+			if (category != null)
+			{
+				if (category1 == null)
+				{
+					return NotFound();
+				}
+			}
+
+			ViewData["currentCategory"] = (category == null) ? "Все" :category1.Name;
 			ViewData["currentCategoryShortName"] = category;
 			ViewBag.Categories = _categories;
 			var productResponse = await _gameService.GetGameListAsync(category, pageNo);
+			
 			if (!productResponse.Successful)
 			{
 				return NotFound(productResponse.ErrorMessage);
