@@ -9,7 +9,11 @@ using WEB_253503_Gudoryan.Domain.HelperClasses;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Serilog;
+using WEB_253503_Gudoryan.UI.Middleware;
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -22,6 +26,14 @@ builder.Services.AddDistributedMemoryCache();
 
 
 builder.RegisterCustomServices();
+
+
+// Настройка Serilog
+Log.Logger = new LoggerConfiguration()
+	.ReadFrom.Configuration(builder.Configuration)
+	.CreateLogger();
+
+//builder.Host.UseSerilog(); 
 
 
 
@@ -78,6 +90,10 @@ app.UseAuthentication();
 app.UseSession(); 
 
 app.UseAuthorization();
+
+
+app.UseMiddleware<LoggingMiddleware>(); 
+
 
 app.MapRazorPages();
 
