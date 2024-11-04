@@ -1,0 +1,50 @@
+﻿@page "/counter"
+@page "/counter/{InitialCount:int}"
+@rendermode InteractiveServer
+@using WEB_253503_Gudoryan.SSR.Models;
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<EditForm Model="@inputNumberModel" OnValidSubmit="SetCount">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputNumber @bind-Value=inputNumberModel.Value />
+
+    <button type="submit" class="btn btn-primary">Set</button>
+
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int InitialCount { get; set; }
+
+    private int currentCount = 0;
+
+    private InputNumberModel inputNumberModel = new InputNumberModel();
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }    
+
+    private void SetCount()
+    {
+        currentCount = inputNumberModel.Value;
+    }
+
+    protected override void OnParametersSet()
+    {
+        currentCount = InitialCount;
+    }
+
+}

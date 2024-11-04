@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEB_253503_Gudoryan.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEB_253503_Gudoryan.API", "WEB_253503_Gudoryan.API\WEB_253503_Gudoryan.API.csproj", "{9629A5CB-BB84-4FB0-A8E5-8327C5227724}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_253503_Gudoryan.Tests", "WEB_253503_Gudoryan.Tests\WEB_253503_Gudoryan.Tests.csproj", "{6265AC28-4098-4119-A5FB-EB239FDAFBD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEB_253503_Gudoryan.Tests", "WEB_253503_Gudoryan.Tests\WEB_253503_Gudoryan.Tests.csproj", "{6265AC28-4098-4119-A5FB-EB239FDAFBD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB_253503_Gudoryan.SSR", "WEB_253503_Gudoryan.SSR\WEB_253503_Gudoryan.SSR.csproj", "{90C676B4-95FC-4A7B-97CB-D1D94570D2FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{6265AC28-4098-4119-A5FB-EB239FDAFBD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6265AC28-4098-4119-A5FB-EB239FDAFBD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6265AC28-4098-4119-A5FB-EB239FDAFBD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C676B4-95FC-4A7B-97CB-D1D94570D2FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C676B4-95FC-4A7B-97CB-D1D94570D2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C676B4-95FC-4A7B-97CB-D1D94570D2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C676B4-95FC-4A7B-97CB-D1D94570D2FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
