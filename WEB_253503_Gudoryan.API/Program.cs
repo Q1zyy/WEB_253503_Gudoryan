@@ -20,6 +20,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowSpecificOrigin",
+		builder =>
+		{
+			builder.WithOrigins("https://localhost:7294")
+				   .AllowAnyMethod()
+				   .AllowAnyHeader();
+		});
+});
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("Default"))
             .EnableSensitiveDataLogging() 
             .LogTo(Console.WriteLine, LogLevel.Information)); 
@@ -58,7 +69,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
+app.UseCors("AllowSpecificOrigin");
+
 app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 

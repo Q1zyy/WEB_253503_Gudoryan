@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace WEB_253503_Gudoryan.Domain.Entities
 {
     public class Game

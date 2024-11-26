@@ -1,0 +1,32 @@
+﻿@page "/games"
+@using WEB_253503_Gudoryan.Domain.Models
+@using WEB_253503_Gudoryan.Domain.Entities
+@using WEB_253503_Gudoryan.BlazorWasm.Services.DataService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+<PageTitle>Games</PageTitle>
+<CategorySelector />
+<GamesList GameSelected="OnGameSelected" />
+<Pager />
+<GameDetail SelectedGame="SelectedGame" />
+
+@code {
+    [Inject] IDataService DataService { get; set; }
+
+    Game SelectedGame { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (DataService.Games == null || !DataService.Games.Any())
+        {
+            await DataService.GetGameListAsync();
+        }
+    }
+
+    void OnGameSelected(int id)
+    {
+        SelectedGame = DataService.Games.FirstOrDefault(d => d.Id == id);    
+    }
+}

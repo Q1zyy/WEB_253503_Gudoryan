@@ -31,6 +31,7 @@ namespace WEB_253503_Gudoryan.API.Controllers
         }
 
         // GET: api/Games
+        //[Authorize]
         [HttpGet("{category?}")]
         public async Task<ActionResult<ResponseData<ListModel<Game>>>> GetGames(string? category, int pageNo = 1, int pageSize = 3)
         {

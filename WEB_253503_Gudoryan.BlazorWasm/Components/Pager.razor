@@ -1,0 +1,42 @@
+﻿@inject IDataService DataService
+@implements IDisposable
+
+@if (DataService.TotalPages > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            @for (int pageq = 1; pageq <= DataService.TotalPages; pageq++)
+            {
+                <li class="page-item @(pageq == DataService.CurrentPage ? "active" : "")">
+                    @{
+                        var cur = pageq;
+                    }
+                    <button class="page-link" @onclick="() => SelectPage(cur)">
+                        @pageq
+                    </button>
+                </li>
+            }
+        </ul>    </nav>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        DataService.DataLoaded += StateHasChanged;
+        await DataService.GetGameListAsync();
+    }
+
+    private async Task SelectPage(int page)
+    {
+        if (page != DataService.CurrentPage)
+        {
+            DataService.CurrentPage = page;
+            await DataService.GetGameListAsync(page);
+        }
+    }
+
+    public void Dispose()
+    {
+        DataService.DataLoaded -= StateHasChanged; 
+    }
+}

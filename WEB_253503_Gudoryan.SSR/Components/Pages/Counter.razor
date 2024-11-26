@@ -11,12 +11,12 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
-<EditForm Model="@inputNumberModel" OnValidSubmit="SetCount">
+<EditForm EditContext="@editContext" OnValidSubmit="SetCount">
 
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <InputNumber @bind-Value=inputNumberModel.Value />
+    <InputNumber @oninput="ValidateOnInput" @bind-Value=inputNumberModel.Value />
 
     <button type="submit" class="btn btn-primary">Set</button>
 
@@ -28,9 +28,16 @@
     [Parameter]
     public int InitialCount { get; set; }
 
+    private EditContext editContext;
+
     private int currentCount = 0;
 
     private InputNumberModel inputNumberModel = new InputNumberModel();
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(inputNumberModel);
+    }
 
     private void IncrementCount()
     {
@@ -45,6 +52,12 @@
     protected override void OnParametersSet()
     {
         currentCount = InitialCount;
+    }
+
+    private void ValidateOnInput(ChangeEventArgs e)
+    {
+        inputNumberModel.Value = int.TryParse(e.Value?.ToString(), out var value) ? value : 0;
+        editContext.NotifyFieldChanged(FieldIdentifier.Create(() => inputNumberModel.Value));
     }
 
 }

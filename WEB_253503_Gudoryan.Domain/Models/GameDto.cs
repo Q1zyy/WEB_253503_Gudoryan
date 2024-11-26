@@ -1,5 +1,4 @@
-﻿using WEB_253503_Gudoryan.Domain.Entities;
-
+﻿
 namespace WEB_253503_Gudoryan.Domain.Models
 {
     public class GameDto

@@ -1,0 +1,40 @@
+﻿@inject IDataService DataService
+
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        @SelectedCategoryName
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+        <li>
+            <a class="dropdown-item" @onclick="() => SelectCategory(null)">
+                All
+            </a>
+        </li>
+        @foreach (var category in DataService.Categories)
+        {
+            <li>
+                <a class="dropdown-item" @onclick="() => SelectCategory(category)">
+                    @category.Name
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    private string SelectedCategoryName => DataService.SelectedCategory?.Name ?? "All";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (DataService.Categories == null || !DataService.Categories.Any())
+        {
+            await DataService.GetCategoryListAsync();
+        }
+    }
+
+    private async Task SelectCategory(Category category)
+    {
+        DataService.SelectedCategory = category;
+        await DataService.GetGameListAsync();
+    }
+}

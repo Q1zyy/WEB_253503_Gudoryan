@@ -1,0 +1,23 @@
+﻿@if (SelectedGame != null)
+{
+    <div class="card">
+        <div class="card-header">
+            <h5>@SelectedGame.Name</h5>
+        </div>
+        <div class="card-body">
+            <img style="width: 200px; height: 200px" src="@SelectedGame.ImagePath"/>
+            <p><strong>Description:</strong> @SelectedGame.Description</p>
+            <p><strong>Price:</strong> @SelectedGame.Price.ToString("C")</p>
+            <p><strong>Category:</strong> @SelectedGame.Category.Name</p>
+        </div>
+    </div>
+}
+else
+{
+    <p>Select a dish to view details.</p>
+}
+
+@code {
+    [Parameter]
+    public Game SelectedGame { get; set; }
+}

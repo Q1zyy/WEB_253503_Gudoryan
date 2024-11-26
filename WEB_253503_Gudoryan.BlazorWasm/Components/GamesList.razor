@@ -1,0 +1,50 @@
+﻿@inject IDataService DataService
+@implements IDisposable
+@using WEB_253503_Gudoryan.Domain.Entities
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (DataService.Games != null)
+        {
+            @foreach (var game in DataService.Games)
+            {
+                <tr>
+                    <td>@game.Name</td>
+                    <button class="btn btn-info" @onclick="() => GameSelected.InvokeAsync(game.Id)">
+                        View Details
+                    </button>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2">Loading...</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> GameSelected { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        DataService.DataLoaded += StateHasChanged;
+        await DataService.GetGameListAsync();
+    }
+
+    public void Dispose()
+    {
+        DataService.DataLoaded -= StateHasChanged;
+    }
+}
